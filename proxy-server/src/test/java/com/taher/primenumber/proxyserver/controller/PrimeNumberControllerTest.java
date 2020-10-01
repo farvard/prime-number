@@ -1,7 +1,7 @@
 package com.taher.primenumber.proxyserver.controller;
 
 import com.taher.primenumber.grpc.PrimeNumberRequest;
-import com.taher.primenumber.proxyserver.PrimeAnswer;
+import com.taher.primenumber.proxyserver.PrimeAnswerMock;
 import com.taher.primenumber.proxyserver.config.PrimeNumberServerConfig;
 import com.taher.primenumber.proxyserver.service.PrimeNumberServerConnection;
 import io.grpc.stub.StreamObserver;
@@ -43,7 +43,7 @@ class PrimeNumberControllerTest {
     @Test
     public void prime_Valid() {
         when(primeNumberServerConfig.getRequestTimeoutMillis()).thenReturn(30000L);
-        doAnswer(new PrimeAnswer()).when(primeNumberServerConnection)
+        doAnswer(new PrimeAnswerMock()).when(primeNumberServerConnection)
                 .primes(any(PrimeNumberRequest.class), any(StreamObserver.class));
         String url = "http://localhost:" + port + "/primes/12";
         String actual = this.restTemplate.execute(url, HttpMethod.GET, null, response -> {
@@ -54,5 +54,34 @@ class PrimeNumberControllerTest {
         });
         String expected = "2,3,5,7,11,";
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void prime_Timeout() {
+        when(primeNumberServerConfig.getRequestTimeoutMillis()).thenReturn(3L);
+        doAnswer(new PrimeAnswerMock(true, false)).when(primeNumberServerConnection)
+                .primes(any(PrimeNumberRequest.class), any(StreamObserver.class));
+        String url = "http://localhost:" + port + "/primes/12";
+        this.restTemplate.execute(url, HttpMethod.GET, null, response -> {
+            InputStream body = response.getBody();
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            IOUtils.copy(body, output);
+            return output.toString();
+        });
+    }
+
+
+    @Test
+    public void prime_Error() {
+        when(primeNumberServerConfig.getRequestTimeoutMillis()).thenReturn(30000L);
+        doAnswer(new PrimeAnswerMock(false, true)).when(primeNumberServerConnection)
+                .primes(any(PrimeNumberRequest.class), any(StreamObserver.class));
+        String url = "http://localhost:" + port + "/primes/12";
+        this.restTemplate.execute(url, HttpMethod.GET, null, response -> {
+            InputStream body = response.getBody();
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            IOUtils.copy(body, output);
+            return output.toString();
+        });
     }
 }

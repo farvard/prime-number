@@ -1,7 +1,7 @@
 package com.taher.primenumber.proxyserver.service;
 
 import com.taher.primenumber.grpc.PrimeNumberRequest;
-import com.taher.primenumber.proxyserver.PrimeAnswer;
+import com.taher.primenumber.proxyserver.PrimeAnswerMock;
 import com.taher.primenumber.proxyserver.config.PrimeNumberServerConfig;
 import com.taher.primenumber.proxyserver.exception.InvalidInputException;
 import io.grpc.stub.StreamObserver;
@@ -36,7 +36,7 @@ class PrimeNumberServiceTest {
     @Test
     void primes_Valid() {
         when(primeNumberServerConfig.getRequestTimeoutMillis()).thenReturn(30000L);
-        doAnswer(new PrimeAnswer()).when(primeNumberServerConnection)
+        doAnswer(new PrimeAnswerMock()).when(primeNumberServerConnection)
                 .primes(any(PrimeNumberRequest.class), any(StreamObserver.class));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         primeNumberService.primes(12, outputStream);

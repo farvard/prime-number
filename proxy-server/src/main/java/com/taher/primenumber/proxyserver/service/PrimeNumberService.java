@@ -67,7 +67,7 @@ public class PrimeNumberService {
                 throw new RequestTimeoutException("request timeout");
             }
         } catch (InterruptedException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e);
         }
     }
 
