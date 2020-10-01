@@ -1,0 +1,15 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.taher.primenumber.grpc;
+
+message PrimeNumberRequest {
+    int32 number = 1;
+}
+
+message PrimeNumber {
+    int32 number = 1;
+}
+
+service PrimeNumberService {
+    rpc primes (PrimeNumberRequest) returns (stream PrimeNumber);
+}
