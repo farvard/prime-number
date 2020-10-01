@@ -41,3 +41,12 @@ which is one of the most efficient ways to find all of the smaller primes.
   <img src="sieve.gif">
 </p>
  
+### How to run
+```properties
+# prime-number-service
+> cd prime-number-service
+> mvn spring-boot:run
+# proxy-server
+> cd proxy-server
+> mvn spring-boot:run
+```
