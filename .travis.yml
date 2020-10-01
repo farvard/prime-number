@@ -4,6 +4,8 @@ env:
 script:
   - cd proxy-server
   - mvn clean package
-after_success:
   - bash <(curl -s https://codecov.io/bash)
-  
+  - cd ../prime-number-server
+  - mvn clean package
+  - bash <(curl -s https://codecov.io/bash)
+
