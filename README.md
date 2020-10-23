@@ -26,7 +26,7 @@ Provides a REST API on top of prime-number-service.
 ##### REST api
 | METHOD | PATH | Description | Parameters | 
 | -----------| ------ | ------ | ----- |
-| GET | /primes/{id} | A stream of prime numbers up to ```number``` | ```number``` an integer bigger than 1 | |
+| GET | /primes/{number} | A stream of prime numbers up to ```number``` | ```number``` an integer bigger than 1 | |
 
 ### Implementation Choices
 * Spring Boot: easier config and cleaner code and also very suitable when dockerizing
